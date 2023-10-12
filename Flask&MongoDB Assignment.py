@@ -17,54 +17,47 @@ dbconn = pymongo.MongoClient("mongodb://localhost:27017/")
 
 @app.route("/db", methods=["POST"])
 def dbdoing():
-    if request.method != "POST":
-        return
-    operation = str(request.json["Operation"])
-    if operation == 'Create Collection':
-        collection_name = request.json['Collection']
-        choose_db = request.json['Choose_Database']
-        try:
-            db1 = dbconn[choose_db]
-            db1.create_collection(collection_name)
-            return jsonify("collection created successfully")
-        except Exception as f:
-            return jsonify(f)
+    if request.method == "POST":
+        operation = str(request.json["Operation"])
+        if operation == "Create Database":
+            dbname = str(request.json["dbname"])
+            try:
+                db = dbconn[dbname]
+                db.create_collection(dbname + "_Collection")
+                return jsonify(dbname + "Database & " + dbname + " Collection Created")
+            except Exception as e:
+                return jsonify(e)
 
-    elif operation == "Add Data":
-        try:
-            data = dict(request.json["dataset"])
-            choose_db = request.json['Choose_Database']
-            db3 = dbconn[choose_db]
-            collection = db3[str(request.json["Choose_Collection"])]
+        if operation == "Show Available Databases":
+            dbnames = dbconn.list_database_names()
+            return jsonify(dbnames)
 
-            collection.insert_many(data)
-            return jsonify(f"{data}Has Been Inserted")
-        except Exception as g:
-            return jsonify(g)
+        if operation == 'Create Collection':
+            collection_name = request.json['Collection']
+            connected_db = request.json['Choose Database']
+            db1 = dbconn[connected_db]
+            try:
+                db1.create_collection(collection_name)
+                return jsonify("collection created successfully")
+            except Exception as f:
+                return jsonify(f)
 
-    elif operation == "Create Database":
-        dbname = str(request.json["dbname"])
-        try:
-            db = dbconn[dbname]
-            db.create_collection(f"{dbname}_Collection")
-            return jsonify(f"{dbname} Database & {dbname} Collection Created")
-        except Exception as e:
-            return jsonify(e)
+        if operation == "Add Data":
+            data_to_add = dict(request.json["dataset"])
+            collection = str(request.json["choose_collection"])
+            collection.insert_many(data_to_add)
+            return jsonify(data_to_add + "Has Been Inserted")
 
-    elif operation == "Show Available Databases":
-        dbnames = dbconn.list_database_names()
-        return jsonify(dbnames)
+        if operation == 'Delete Data':
 
-    elif operation == "Drop Database":
-        try:
-            db2 = dbconn[str(request.json["Choose_Database"])]
-            db2.drop()
-            return jsonify('database dropped successfully')
-        except Exception as h:
-            return jsonify(h)
+            return
 
+        if operation == "Drop Database":
+            dbtoremove = dbconn[request.json['Choose_Database']]
+            dbconn.drop_database(dbtoremove)
+            return jsonify('Database Has been Dropped')
 
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
