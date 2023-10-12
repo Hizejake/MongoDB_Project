@@ -22,8 +22,9 @@ def dbdoing():
     operation = str(request.json["Operation"])
     if operation == 'Create Collection':
         collection_name = request.json['Collection']
-        db1 = dbconn[request.json['Choose Database']]
+        choose_db = request.json['Choose_Database']
         try:
+            db1 = dbconn[choose_db]
             db1.create_collection(collection_name)
             return jsonify("collection created successfully")
         except Exception as f:
@@ -32,7 +33,7 @@ def dbdoing():
     elif operation == "Add Data":
         try:
             data = dict(request.json["dataset"])
-            collection = str(request.json["choose_collection"])
+            collection = str(request.json["Choose_Collection"])
             collection.insert_many(data)
             return jsonify(f"{data}Has Been Inserted")
         except Exception as g:
@@ -43,13 +44,23 @@ def dbdoing():
         try:
             db = dbconn[dbname]
             db.create_collection(f"{dbname}_Collection")
-            return jsonify(f"{dbname}Database & {dbname} Collection Created")
+            return jsonify(f"{dbname} Database & {dbname} Collection Created")
         except Exception as e:
             return jsonify(e)
 
     elif operation == "Show Available Databases":
         dbnames = dbconn.list_database_names()
         return jsonify(dbnames)
+
+    # elif operation == "Drop Database":
+    #     try:
+    #         db2 = dbconn[str(request.json("Choose_Database"))]
+    #         db2.drop()
+    #         return jsonify('database dropped successfully')
+    #     except Exception as h:
+    #         return jsonify(h)
+
+
 
 
 if __name__ == "__main__":
