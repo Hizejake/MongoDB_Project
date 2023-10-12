@@ -30,10 +30,14 @@ def dbdoing():
             return jsonify(f)
 
     elif operation == "Add Data":
-        data = dict(request.json["dataset"])
-        collection = str(request.json["choose_collection"])
-        collection.insert_many(data)
-        return jsonify(f"{data}Has Been Inserted")
+        try:
+            data = dict(request.json["dataset"])
+            collection = str(request.json["choose_collection"])
+            collection.insert_many(data)
+            return jsonify(f"{data}Has Been Inserted")
+        except Exception as g:
+            return jsonify(g)
+
     elif operation == "Create Database":
         dbname = str(request.json["dbname"])
         try:
