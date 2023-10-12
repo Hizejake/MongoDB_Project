@@ -24,22 +24,29 @@ def dbdoing():
             try:
                 db = dbconn[dbname]
                 db.create_collection(dbname + "_Collection")
-                return jsonify(dbname + "Database &" + dbname + " Collection Created")
+                return jsonify(dbname + "Database & " + dbname + " Collection Created")
             except Exception as e:
                 return jsonify(e)
 
-            if operation == 'Create Collection':
-                collection_name = str(request.json['Collection'])
-                db.create_collection(collection_name)
-                return jsonify(collection_name+' Collection Created Successfully')
+        if operation == "Show Available Databases":
+            dbnames = dbconn.list_database_names()
+            return jsonify(dbnames)
 
-        if operation == 'Show Available Databases':
-            dir = dbconn.list_database_names()
-            return jsonify(dir)
+        if operation == 'Create Collection':
+            collection_name = request.json['Collection']
+            connected_db = request.json['Choose Database']
+            db1 = dbconn[connected_db]
+            try:
+                db1.create_collection(collection_name)
+                return jsonify("collection created successfully")
+            except Exception as f:
+                return jsonify(f)
 
-        if operation == 'Add Data':
-            return
-
+        if operation == "Add Data":
+            data = dict(request.json["dataset"])
+            collection = str(request.json["choose_collection"])
+            collection.insert_many(data)
+            return jsonify(data + "Has Been Inserted")
 
 
 if __name__ == "__main__":
