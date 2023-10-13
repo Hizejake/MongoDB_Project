@@ -4,5 +4,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Session 8 - Rest&amp;Flask" />
+    <orderEntry type="module" module-name="Session 7 - MongoDB" />
   </component>
 </module>

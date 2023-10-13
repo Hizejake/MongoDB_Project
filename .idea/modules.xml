@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MongoDB_Project.iml" filepath="$PROJECT_DIR$/.idea/MongoDB_Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../VSCode/lib/Data-Science/DS COURSE MATERIAL/Session 7 - MongoDB/.idea/Session 7 - MongoDB.iml" filepath="$PROJECT_DIR$/../VSCode/lib/Data-Science/DS COURSE MATERIAL/Session 7 - MongoDB/.idea/Session 7 - MongoDB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../VSCode/lib/Data-Science/DS COURSE MATERIAL/Session 8 - Rest&amp;Flask/.idea/Session 8 - Rest&amp;Flask.iml" filepath="$PROJECT_DIR$/../VSCode/lib/Data-Science/DS COURSE MATERIAL/Session 8 - Rest&amp;Flask/.idea/Session 8 - Rest&amp;Flask.iml" />
     </modules>
   </component>
 </project>

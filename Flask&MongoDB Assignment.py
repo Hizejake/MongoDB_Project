@@ -5,11 +5,8 @@
 # 4. delete from table
 # 5. download data from database
 
-import random
-import math
-import string
-from flask import Flask, request, jsonify, render_template
 import pymongo
+from flask import Flask, request, jsonify
 
 app = Flask("__name__")
 dbconn = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -43,14 +40,21 @@ def dbdoing():
                 return jsonify(f)
 
         if operation == "Add Data":
-            data_to_add = dict(request.json["dataset"])
-            collection = str(request.json["choose_collection"])
-            collection.insert_many(data_to_add)
-            return jsonify(data_to_add + "Has Been Inserted")
+            dataset = request.json['dataset']
+            choose_db = dbconn[request.json['Choose_Database']]
+            choose_collection = choose_db[request.json['choose_collection']]
+            choose_collection.insert_one(dataset)
+            return jsonify(str(dataset) + 'Has been Inserted')
 
         if operation == 'Delete Data':
-
-            return
+            dataset_todel = request.json['dataset']
+            choose_db_todel = dbconn[request.json['Choose_Database']]
+            choose_collection_todel = choose_db_todel[request.json['choose_collection']]
+            try:
+                choose_collection_todel.delete_one(dataset_todel)
+                return jsonify(str(dataset_todel) + 'Has been Deleted')
+            finally:
+                return jsonify("dataset DNE")
 
         if operation == "Drop Database":
             dbtoremove = dbconn[request.json['Choose_Database']]
@@ -58,6 +62,5 @@ def dbdoing():
             return jsonify('Database Has been Dropped')
 
 
-
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
